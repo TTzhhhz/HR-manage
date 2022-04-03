@@ -1,4 +1,7 @@
 build/*.js
+build/**/*.vue
+dev/*.vue
+serve/*.vue
 src/assets
 public
 dist
