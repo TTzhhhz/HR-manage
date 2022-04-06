@@ -8,7 +8,7 @@
 
     <div class="app-breadcrumb">
       重庆市北碚区天生路西南大学
-      <span class="breadBtn">测试版</span>
+      <span class="breadBtn">点击头像可获取GitHub地址</span>
     </div>
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
