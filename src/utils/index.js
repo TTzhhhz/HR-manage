@@ -45,7 +45,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -115,3 +115,22 @@ export function param2Obj(url) {
   })
   return obj
 }
+// 封装一个将数组转化为树形结构的函数
+export function tranListToTreeData(list, rootVal) {
+  // 递归算法，父亲的id和儿子的pid相等
+  var arr = []
+  list.forEach((item) => {
+    debugger
+    // 先找根节点
+    if (item.pid == rootVal) {
+      // 找到根节点之后，是否下面有字节点
+      const children = tranListToTreeData(list, item.id)
+      if (children.length > 0) {
+        // 说明找到了子节点,找到子节点就赋给当前节点的children属性
+        item.children = children
+      }
+      arr.push(item)
+    }
+  })
+  return arr
+} 

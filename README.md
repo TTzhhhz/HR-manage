@@ -1,99 +1,40 @@
-# vue-admin-template
+该项目是基于vue-element-admin基础模版搭建的后台管理项目
+   原模版的github地址：[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
+   线上demo地址:https://panjiachen.github.io/vue-element-admin/#/login?redirect=%2Fdashboard
+   
+使用的接口和技术
+   后台接口:使用的是传智播客所提供的接口。
+   ui界面：基于vue和element-ui搭建的前端页面，使用到的技术包括vue脚手架、vue-router、vuex，axios(进行了二次封装)，scss。
+   由于格式化工具配置问题有一些问题，所以我暂时关闭了eslint语法检查
 
-English | [简体中文](./README-zh.md)
+   由于研一有专业课要上，并且导师那边要求写论文以及各种各样的事情，所以我这个项目耗时比较长，但是每天都会至少做一部分，毕竟一天不学前端我浑身难受啊
 
-> A minimal vue admin template with Element UI & axios & iconfont & permission control & lint
+进度
+   2022-4-1:写了登陆模块
+            1、scss中要使用@作为src路径需要在前面加上～
+            2、两个事件修饰符.native和.enter,enter是键盘事件修饰符，判断按键为enter,native是进行组件穿透，饿了么组件他是封装的，真正的事件是添加到内部真正的button按钮等
+            3、用proxy代理服务器在vue配置文件中配置，解决了开发过程中的跨域问题
+            4、process.env是环境变量，能够去到开发/上线环境文件中对应的值
+            5、token字符串保存到cookie和vuex中
+   
+   2022-4-3:写了主页模块
+            1、在axios请求拦截器中把token注入，这个传智播客的每个接口都需要请求头携带token
+            2、免登录：在前置导航守卫中，判断如果有token，并且访问的是登录页，就直接跳转到主页
+            3、token的被动判断，由后台判断并传来的状态码进行判断，写在响应拦截器
+            4、头像获取异常的问题：vue自定义指令，写在src下面的directives文件夹下面，具体可看一下，main.js中批量导入（自定义指令我不太熟悉，而且导入配置时用的也比较新奇,复习的话可以看一下main中的配置），img标签如果有路径但是没有获取到图片就会触发onerror事件，es6新增的Object.keys(对象)方法，能够将对象中的键作为新的数组返回
+            5、为什么data中的路径数据要求用require（）引入，这是为了防止在上线后由于路径改变变化引起的错误
 
-**Live demo:** http://panjiachen.github.io/vue-admin-template
+   2002-4-6:写了路由和页面跳转
+            1、这个模版是通过遍历路由来创建左侧导航栏的，里面用到了函数式组件（没有data，this等，只有props，没有用过）
+            2、两个命令，touch创建文件、mkdir创建文件夹，主要是在创建不同的页面组件时候用到
+
+   2022-4-7:开始写组织架构模块
+            1、后台得到的组织架构数据是数组，使用element-ui组件的树插件
+            2、写了一个递归函数把数组转化成树格式的数据
+            3、匿名插槽、具名插槽、作用域插槽、饿了么组件的树插件和table中使用到的插槽https://blog.csdn.net/qq_38800316/article/details/122989563，忘记的话可以看一下这个博客
+        4-8:1、封装删除组织架构部门的请求函数
+            2、使用了this.$confirm方法提示用户是否确认删除
+            3、使用自定义方法对删除后的数据重新获取，页面渲染，否则每次删除后都要刷新
 
 
-**The current version is `v4.0+` build on `vue-cli`. If you want to use the old version , you can switch branch to [tag/3.11.0](https://github.com/PanJiaChen/vue-admin-template/tree/tag/3.11.0), it does not rely on `vue-cli`**
 
-<p align="center">
-  <b>SPONSORED BY</b>
-</p>
-<p align="center">
-   <a href="https://finclip.com?from=vue_element" title="FinClip" target="_blank">
-      <img height="200px" src="https://gitee.com/panjiachen/gitee-cdn/raw/master/vue%E8%B5%9E%E5%8A%A9.png" title="FinClip">
-   </a>
-</p>
-
-## Build Setup
-
-```bash
-# clone the project
-git clone https://github.com/PanJiaChen/vue-admin-template.git
-
-# enter the project directory
-cd vue-admin-template
-
-# install dependency
-npm install
-
-# develop
-npm run dev
-```
-
-This will automatically open http://localhost:9528
-
-## Build
-
-```bash
-# build for test environment
-npm run build:stage
-
-# build for production environment
-npm run build:prod
-```
-
-## Advanced
-
-```bash
-# preview the release environment effect
-npm run preview
-
-# preview the release environment effect + static resource analysis
-npm run preview -- --report
-
-# code format check
-npm run lint
-
-# code format check and auto fix
-npm run lint -- --fix
-```
-
-Refer to [Documentation](https://panjiachen.github.io/vue-element-admin-site/guide/essentials/deploy.html) for more information
-
-## Demo
-
-![demo](https://github.com/PanJiaChen/PanJiaChen.github.io/blob/master/images/demo.gif)
-
-## Extra
-
-If you want router permission && generate menu by user roles , you can use this branch [permission-control](https://github.com/PanJiaChen/vue-admin-template/tree/permission-control)
-
-For `typescript` version, you can use [vue-typescript-admin-template](https://github.com/Armour/vue-typescript-admin-template) (Credits: [@Armour](https://github.com/Armour))
-
-## Related Project
-
-- [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
-
-- [electron-vue-admin](https://github.com/PanJiaChen/electron-vue-admin)
-
-- [vue-typescript-admin-template](https://github.com/Armour/vue-typescript-admin-template)
-
-- [awesome-project](https://github.com/PanJiaChen/vue-element-admin/issues/2312)
-
-## Browsers support
-
-Modern browsers and Internet Explorer 10+.
-
-| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
-| --------- | --------- | --------- | --------- |
-| IE10, IE11, Edge| last 2 versions| last 2 versions| last 2 versions
-
-## License
-
-[MIT](https://github.com/PanJiaChen/vue-admin-template/blob/master/LICENSE) license.
-
-Copyright (c) 2017-present PanJiaChen
