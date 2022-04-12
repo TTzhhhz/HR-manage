@@ -12,3 +12,17 @@ export function delDepartments(id) {
     url: `/company/department/${id}`
   })
 }
+// 封装新增部门的接口
+export function addDepartments(data) {
+  return request({
+    method: 'post',
+    url: '/company/department',
+    data
+  })
+}
+// 封装获取部门详情的接口，用于编辑时显示在表单中
+export function getDepartDetail(id) {
+  return request({
+    url: `/company/department/${id}`
+  })
+}

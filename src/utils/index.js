@@ -120,7 +120,6 @@ export function tranListToTreeData(list, rootVal) {
   // 递归算法，父亲的id和儿子的pid相等
   var arr = []
   list.forEach((item) => {
-    debugger
     // 先找根节点
     if (item.pid == rootVal) {
       // 找到根节点之后，是否下面有字节点

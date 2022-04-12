@@ -52,8 +52,11 @@ export default {
     operateDepts(type) {
       if (type === "add") {
         // 添加子部门
+        // 自定义方法告诉父组件显示弹窗,传出treeNode是确定在哪个部门下添加子部门
+        this.$emit("addDepts", this.treeNode);
       } else if (type === "edit") {
         // 编辑部门
+        this.$emit("editDepts", this.treeNode);
       } else {
         // 删除部门
         // delDepartments(this.treeNode.id);
