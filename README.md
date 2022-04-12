@@ -53,6 +53,13 @@
                         manager: "",
                         introduce: "",
                      };
+            4、今天还碰到git提交一直卡住没反应的问题
+               解决：添加sendpack.sideband属性并置为false就解决了。
+                     全局的：git config --global sendpack.sideband false
+                     仓库的：git config --local sendpack.sideband false
+                     可以通过git config --local -l 查看该属性
+
+
     
             
 
