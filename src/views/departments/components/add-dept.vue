@@ -62,6 +62,7 @@ import {
   getDepartments,
   addDepartments,
   getDepartDetail,
+  updateDepartments,
 } from "@/api/departments.js";
 import { getEmployeeSimple } from "@/api/employees.js";
 export default {
@@ -86,9 +87,15 @@ export default {
     btnOK() {
       this.$refs.deptForm.validate(async (isOK) => {
         if (isOK) {
-          // 表单校验通过,要把当前元素节点的id作为子部门的pid发送到后台，表明要添加这个部门下的新部门
-          await addDepartments({ ...this.formData, pid: this.treeNode.id });
-          // 后台新增之后，父组件要重新拉数据
+          // 点击确定进行场景区分（根据formdata有无id）
+          if (this.formData.id) {
+            // 有id为编辑功能
+            await updateDepartments(this.formData);
+          } else {
+            // 表单校验通过,要把当前元素节点的id作为子部门的pid发送到后台，表明要添加这个部门下的新部门
+            await addDepartments({ ...this.formData, pid: this.treeNode.id });
+          }
+          // 后台新增或者编辑之后，父组件要重新拉数据
           this.$emit("addDepts");
           // 关闭dialog时会自动触发close事件，所以这里不再单独清除数据
           this.$emit("update:showDialog", false);
@@ -111,26 +118,47 @@ export default {
     },
   },
   data() {
-    // 检查部门名字是否重复
+    // 检查部门名字是否重复（需要区分编辑还是新增）
     const checkNameRepeat = async (rule, value, callback) => {
       // value是校验对象，要和同级部门下的部门比，如果名字相同，校验失败，不相同，校验成功
       //这里要立即获取一下最新的部门数据，因为其他人有可能已经添加过了
       const { depts } = await getDepartments();
-      // console.log(depts);
-      // 找到所有的pid为当前节点的id的子部门
-      const isRepeat = depts
-        .filter((item) => item.pid === this.treeNode.id)
-        .some((item) => item.name === value);
-      debugger;
+      let isRepeat = false;
+      if (this.formData.id) {
+        // 有id为编辑模式
+        // 规则：name不能和同级别部门名字相同，先根据pid筛选出找到除取自身的同级别部门
+        isRepeat = depts
+          .filter(
+            (item) =>
+              item.id !== this.treeNode.id && item.pid === this.formData.pid
+          )
+          .some((item) => item.name === this.formData.name);
+      } else {
+        // 无id为新增模式
+        // 找到所有的pid为当前节点的id的子部门
+        isRepeat = depts
+          .filter((item) => item.pid === this.treeNode.id)
+          .some((item) => item.name === value);
+      }
       // 如果isRepeat为ture表示有重复的名字
       isRepeat ? callback(new Error("该部门已存在")) : callback();
     };
     // 检查部门编码是否重复，这里就不需要筛选子部门了
     const checkCodeRepeat = async (rule, value, callback) => {
       const { depts } = await getDepartments();
-      console.log(depts);
-      // 不需要筛选出子部门了,这里历史数据可能code为空，多加一个判断(我不觉得不需要，因为编码的上一条规则已经定义是在1-50的了，是不是为了防止输空格)
-      const isRepeat = depts.some((item) => item.code === value && value);
+      let isRepeat = false;
+      if (this.formData.id) {
+        // 编辑模式
+        // 规则：除了自身不能有同样的code
+        debugger;
+        isRepeat = depts
+          .filter((item) => item.id !== this.treeNode.id)
+          .some((item) => item.code === this.formData.code);
+      } else {
+        // 新增模式
+        // 不需要筛选出子部门了,这里历史数据可能code为空，多加一个判断(我不觉得不需要，因为编码的上一条规则已经定义是在1-50的了，是不是为了防止输空格)
+        isRepeat = depts.some((item) => item.code === value && value);
+      }
       // 如果isRepeat为ture表示有重复的名字
       isRepeat ? callback(new Error("编码已经存在")) : callback();
     };

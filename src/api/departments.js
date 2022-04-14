@@ -20,6 +20,14 @@ export function addDepartments(data) {
     data
   })
 }
+// 封装保存编辑部门的接口
+export function updateDepartments(data) {
+  return request({
+    method: 'put',
+    url: `/company/department/${data.id}`,
+    data
+  })
+}
 // 封装获取部门详情的接口，用于编辑时显示在表单中
 export function getDepartDetail(id) {
   return request({

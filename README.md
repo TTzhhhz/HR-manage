@@ -57,7 +57,13 @@
                解决：添加sendpack.sideband属性并置为false就解决了。
                      全局的：git config --global sendpack.sideband false
                      仓库的：git config --local sendpack.sideband false
-                     可以通过git config --local -l 查看该属性
+                     可以通过git config --local -l 查看
+       4-14:1、在弹窗中点击确定时，对于编辑和新增进行区分操作
+               bug：在编辑时点击确定，会显示编码存在，这是因为使用按照新增的规则来校验的，要新增校验
+            2、在code和name的自定义校验规则中区分编辑和新增的规则
+            
+       组织架构模块结束
+
 
 
     
