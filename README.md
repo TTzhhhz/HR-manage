@@ -1,4 +1,4 @@
-该项目是基于vue-element-admin基础模版搭建的后台管理项目
+介绍：该项目是基于vue-element-admin基础模版搭建的后台管理项目
    原模版的github地址：[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
    线上demo地址:https://panjiachen.github.io/vue-element-admin/#/login?redirect=%2Fdashboard
    
@@ -7,7 +7,7 @@
    ui界面：基于vue和element-ui搭建的前端页面，使用到的技术包括vue脚手架、vue-router、vuex，axios(进行了二次封装)，scss。
    由于格式化工具配置问题有一些问题，所以我暂时关闭了eslint语法检查
 
-   由于研一有专业课要上，并且导师那边要求写论文以及各种各样的事情，所以我这个项目耗时比较长，但是每天都会至少做一部分，毕竟一天不学前端我浑身难受啊
+   <!-- 由于研一有专业课要上，并且导师那边要求写论文以及各种各样的事情，所以我这个项目耗时比较长，但是每天都会至少做一部分，毕竟一天不学前端我浑身难受啊 -->
 
 进度
    2022-4-1:写了登陆模块
@@ -53,7 +53,7 @@
                         manager: "",
                         introduce: "",
                      };
-            4、今天还碰到git提交一直卡住没反应的问题
+            4、今天还碰到git提交一直卡住没反应的问题(我怀疑是我网络问题。打扰了)
                解决：添加sendpack.sideband属性并置为false就解决了。
                      全局的：git config --global sendpack.sideband false
                      仓库的：git config --local sendpack.sideband false
@@ -61,8 +61,13 @@
        4-14:1、在弹窗中点击确定时，对于编辑和新增进行区分操作
                bug：在编辑时点击确定，会显示编码存在，这是因为使用按照新增的规则来校验的，要新增校验
             2、在code和name的自定义校验规则中区分编辑和新增的规则
-            
-       组织架构模块结束
+   组织架构模块结束
+
+   2022-4-15:公司角色模块
+       4-15:使用table表格组件、form表单组件，Alert警告组件，Tabs标签页搭建了设置页面的基本结构
+            <!-- 10点多了，我顶不住了我太困了，最近事情太多了 -->
+
+
 
 
 
