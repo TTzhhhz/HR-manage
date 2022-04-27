@@ -34,3 +34,11 @@ export function getRoleDetail(id) {
     url: `/sys/role/${id}`,
   })
 }
+// 新增角色的api
+export function addRole(data) {
+  return request({
+    url: '/sys/role',
+    method: 'post',
+    data
+  })
+}

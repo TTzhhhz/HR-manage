@@ -11,7 +11,8 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
-
+import components from './components'
+import * as filters from '@/filters'
 import '@/icons' // icon
 import '@/permission' // permission control
 import * as directives from '@/directives'
@@ -32,10 +33,17 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 Vue.config.devtools = true;
+//注册自定义指令
 Object.keys(directives).forEach(key => {
   Vue.directive(key, directives[key])
 })
-
+// 注册过滤器
+console.log(Object.keys(filters));
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
+// 注册自定义组件
+Vue.use(components)
 new Vue({
   el: '#app',
   router,

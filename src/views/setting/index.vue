@@ -7,7 +7,11 @@
           <el-tab-pane label="角色管理">
             <!-- 左侧 -->
             <el-row>
-              <el-button type="primary" icon="el-icon-plus" size="small"
+              <el-button
+                type="primary"
+                icon="el-icon-plus"
+                size="small"
+                @click="showDialog = true"
                 >新增角色</el-button
               >
             </el-row>
@@ -107,7 +111,7 @@
       </el-card>
     </div>
     <!-- 防止弹层用于编辑和新增 -->
-    <el-dialog :visible="showDialog" title="编辑部门">
+    <el-dialog :visible="showDialog" title="编辑部门" @close="btnCancle">
       <el-form
         label-width="120px"
         :model="roleFrom"
@@ -140,6 +144,7 @@ import {
   deleteRole,
   getRoleDetail,
   updateRole,
+  addRole,
 } from "@/api/setting.js";
 import { mapGetters } from "vuex";
 export default {
@@ -149,7 +154,7 @@ export default {
       page: {
         // 防止页码以及相关数据，作为getRoleList的查询参数,要和分页组件进行绑定
         page: 1,
-        pagesize: 2,
+        pagesize: 9,
         total: 0,
       },
       formData: {
@@ -186,6 +191,8 @@ export default {
     },
     async getCompanyInfo() {
       this.formData = await getCompanyInfo(this.companyId);
+      debugger;
+      console.log(this.formData);
     },
     async deleteRole(id) {
       // 先提示是否删除
@@ -202,7 +209,15 @@ export default {
       this.roleFrom = await getRoleDetail(id);
       this.showDialog = true; // 展示弹层
     },
-    btnCancle() {},
+    btnCancle() {
+      this.roleFrom = {
+        name: "",
+        description: "",
+      };
+      // 清空校验规则
+      this.$refs.roleForm.resetFields();
+      this.showDialog = false;
+    },
     async btnOk() {
       // 点击确定,校验表单-提交表单
       try {
@@ -214,11 +229,12 @@ export default {
           await updateRole(this.roleFrom);
           // 重新渲染页面
           this.getRoleList();
-          this.$message("编辑成功");
-          this.showDialog = false; // 关闭弹层
         } else {
           // 执行新增
+          await addRole(this.roleFrom);
         }
+        this.$message("编辑成功");
+        this.showDialog = false; // 关闭弹层
       } catch (error) {
         console.log("校验失败");
       }
@@ -226,6 +242,7 @@ export default {
   },
   created() {
     this.getRoleList();
+    this.getCompanyInfo();
   },
 };
 </script>

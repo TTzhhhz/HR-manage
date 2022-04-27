@@ -39,6 +39,15 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
+    path: '/import',
+    component: Layout,
+    hidden: true, // 表示不显示在左侧菜单中
+    children: [{
+      path: '',// 默认的二级路由
+      component: () => import('@/views/import')
+    }]
+  },
+  {
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
