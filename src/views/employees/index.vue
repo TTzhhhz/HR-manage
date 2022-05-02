@@ -47,7 +47,12 @@
         </el-table-column>
         <el-table-column label="操作" sortable="" fixed="right" width="280">
           <template slot-scope="{ row }">
-            <el-button type="text" size="small">查看</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="$router.push(`/employees/detail/${row.id}`)"
+              >查看</el-button
+            >
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
@@ -77,6 +82,7 @@
 import { getEmployeeList, delEmployee } from "@/api/employees";
 import EmployeeEnum from "@/api/constant/employees"; // 员工枚举对象
 import AddEmployee from "./components/add-employee.vue";
+import { formatDate } from "@/filters";
 export default {
   components: {
     AddEmployee,
@@ -122,8 +128,8 @@ export default {
     exportData() {
       // 转化数据结构，并且和表头的顺序对应。并且要求导出的表头是中文
       const headers = {
-        手机号: "mobile",
         姓名: "username",
+        手机号: "mobile",
         入职日期: "timeOfEntry",
         聘用形式: "formOfEmployment",
         转正日期: "correctionTime",
@@ -139,13 +145,17 @@ export default {
         const data = this.fromatJson(headers, rows);
         // 对rows进行格式上的转化
         // excel是引入文件的导出方法
+        const multiHeader = [["姓名", "主要信息", "", "", "", "", ""]];
+        const merges = ["A1:A2", "B1:F1", "G1:G2"];
         excel.export_json_to_excel({
           // 表头从哪里来
           header: Object.keys(headers),
           // 数据从哪里来,没有接口获取所有数据
           data: data,
-          filename: "工资表",
+          filename: "资料",
           bookType: "xlsx",
+          multiHeader,
+          merges,
         });
       });
     },
@@ -153,6 +163,21 @@ export default {
       // headers主要是为了和表头对应
       return rows.map((item) => {
         return Object.keys(headers).map((keys) => {
+          // 判断如果是时间字段
+          if (
+            headers[keys] === "timeOfEntry" ||
+            headers[keys] === "correctionTime"
+          ) {
+            // 格式化日期
+            return formatDate(item[headers[keys]]);
+          } else if (headers[keys] === "formOfEmployment") {
+            console.log(EmployeeEnum.hireType);
+            debugger;
+            const obj = EmployeeEnum.hireType.find(
+              (obj) => obj.id === item[headers[keys]]
+            );
+            return obj ? obj.value : "未知";
+          }
           return item[headers[keys]];
         });
       });

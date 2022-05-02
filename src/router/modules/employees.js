@@ -13,5 +13,12 @@ export default {
       title: '教职工管理',
       icon: 'people'
     }
+  }, {
+    path: 'detail/:id', // 动态路由参数/detail/123，加了问号表明又没有id都可以访问
+    component: () => import('@/views/employees/detail.vue'),
+    hidden: true, // 该内容不在左侧菜单显示，只能有一个子路由，所以要加hidden
+    meta: {
+      title: '教职工详情'
+    }
   }]
 }
