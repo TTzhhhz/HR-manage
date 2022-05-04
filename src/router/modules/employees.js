@@ -20,5 +20,12 @@ export default {
     meta: {
       title: '教职工详情'
     }
+  }, {
+    path: 'print/:id?',
+    component: () => import('@/views/employees/print.vue'),
+    hidden: true,
+    meta: {
+      title: "员工打印"
+    }
   }]
 }

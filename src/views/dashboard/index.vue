@@ -1,11 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
-    <page-tools :showBefore="true">
-      <el-button slot="before">左侧插槽</el-button>
-      <el-button type="primary" slot="after">导入</el-button>
-    </page-tools>
-    <upload-excel></upload-excel>
+    <image-upload></image-upload>
   </div>
 </template>
 

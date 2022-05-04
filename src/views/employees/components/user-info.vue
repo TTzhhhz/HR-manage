@@ -58,6 +58,7 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
+            <image-upload ref="staffPhoto"></image-upload>
           </el-form-item>
         </el-col>
       </el-row>
@@ -91,6 +92,7 @@
 
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
+          <image-upload ref="myStaffPhoto"></image-upload>
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select v-model="formData.nationalArea" class="inputW2">
@@ -472,16 +474,40 @@ export default {
   methods: {
     async getUserDetailById() {
       this.userInfo = await getUserDetailById(this.userId);
+      // 下面为什么判断trim（）也不能为空呢，因为如果不加这个，因为下面保存的接口问题我们传递到后台的图片url是‘ ’
+      // 当获取到后台空格字符串的时候会显示有图片但是显示不出来，加了这个判断后，如果后台没图片就直接不给upload组件的fileList的url了
+      if (this.userInfo.staffPhoto && this.userInfo.staffPhoto.trim()) {
+        // 有值表示原先已经有个头像,这里给upload为true，当不修改图片直接保存的时候，表明图片上传成功了
+        this.$refs.staffPhoto.fileList = [
+          { url: this.userInfo.staffPhoto, upload: true },
+        ];
+      }
     },
     async getPersonalDetail() {
       try {
         this.formData = await getPersonalDetail(this.userId);
+        if (this.formData.staffPhoto) {
+          this.$refs.myStaffPhoto.fileList = [
+            { url: this.formData.staffPhoto, upload: true },
+          ];
+        }
       } catch (error) {
         this.$message.error("获取详情信息失败");
       }
     },
     async saveUser() {
-      await saveUserDetailById(this.userInfo);
+      // 先去获取头像中的地址
+      const fileList = this.$refs.staffPhoto.fileList;
+      // 先判断图片是否上传完成upload为true
+      if (fileList.some((item) => item.upload !== true)) {
+        // 此时有图片未上传成功
+        return this.$message.warning("还有图片未上传成功，请稍等");
+      }
+      debugger;
+      await saveUserDetailById({
+        ...this.userInfo,
+        staffPhoto: fileList && fileList.length ? fileList[0].url : " ",
+      });
       this.$message.success("保存用户基本信息成功");
     },
     async savePersonal() {

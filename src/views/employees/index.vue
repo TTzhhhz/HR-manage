@@ -27,6 +27,23 @@
       <el-table v-loading="loading" :data="List">
         <el-table-column label="序号" type="index" sortable="" />
         <el-table-column label="姓名" prop="username" sortable="" />
+        <el-table-column width="120px" label="头像" align="center">
+          <!-- 这里要用到当前行元素的图片路径属性，所以要用作用域插槽 -->
+          <template slot-scope="{ row }">
+            <img
+              v-imagerror="require('@/assets/common/head.jpg')"
+              :src="row.staffPhoto"
+              alt=""
+              style="
+                border-radius: 50%;
+                width: 100px;
+                height: 100px;
+                padding: 10px;
+              "
+              @click="showTwoCode(row.staffPhoto)"
+            />
+          </template>
+        </el-table-column>
         <el-table-column label="工号" prop="workNumber" sortable="" />
         <el-table-column
           label="聘用形式"
@@ -75,6 +92,11 @@
       </el-row>
     </div>
     <add-employee :showDialog.sync="showDialog"></add-employee>
+    <el-dialog title="二维码" :visible.sync="showCodeDialog">
+      <el-row type="flex" justify="center">
+        <canvas ref="myCanvas"></canvas>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
@@ -83,6 +105,7 @@ import { getEmployeeList, delEmployee } from "@/api/employees";
 import EmployeeEnum from "@/api/constant/employees"; // 员工枚举对象
 import AddEmployee from "./components/add-employee.vue";
 import { formatDate } from "@/filters";
+import QrCode from "qrcode";
 export default {
   components: {
     AddEmployee,
@@ -97,6 +120,7 @@ export default {
       },
       loading: false,
       showDialog: false,
+      showCodeDialog: false,
     };
   },
   methods: {
@@ -181,6 +205,17 @@ export default {
           return item[headers[keys]];
         });
       });
+    },
+    showTwoCode(url) {
+      // 只有url存在才弹出层，否则提示
+      if (url) {
+        this.showCodeDialog = true;
+        this.$nextTick(() => {
+          QrCode.toCanvas(this.$refs.myCanvas, url);
+        });
+      } else {
+        this.$message.warning("此用户还未上传头像");
+      }
     },
   },
   created() {
