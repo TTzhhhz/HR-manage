@@ -73,7 +73,9 @@
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
-            <el-button type="text" size="small">角色</el-button>
+            <el-button type="text" size="small" @click="editRole(row.id)"
+              >角色</el-button
+            >
             <el-button type="text" size="small" @click="delEmployee(row.id)"
               >删除</el-button
             >
@@ -97,6 +99,11 @@
         <canvas ref="myCanvas"></canvas>
       </el-row>
     </el-dialog>
+    <assign-role
+      :showRoleDialog.sync="showRoleDialog"
+      :userId="userId"
+      ref="assignRole"
+    ></assign-role>
   </div>
 </template>
 
@@ -106,9 +113,11 @@ import EmployeeEnum from "@/api/constant/employees"; // 员工枚举对象
 import AddEmployee from "./components/add-employee.vue";
 import { formatDate } from "@/filters";
 import QrCode from "qrcode";
+import AssignRole from "./components/assign-role.vue";
 export default {
   components: {
     AddEmployee,
+    AssignRole,
   },
   data() {
     return {
@@ -121,9 +130,17 @@ export default {
       loading: false,
       showDialog: false,
       showCodeDialog: false,
+      showRoleDialog: false,
+      userId: "",
     };
   },
   methods: {
+    async editRole(id) {
+      this.userId = id;
+      // 这里为什么要加await 因为这个方法是一个异步方法，不加的话，可能弹层之后才会调用该方法，那么用户含有的角色打勾就会有闪烁的瞬间
+      await this.$refs.assignRole.getUserDetailById(id); // 通过父组件调用子组件的方法，这时候用的id是父组件的
+      this.showRoleDialog = true;
+    },
     async getEmployeeList() {
       this.loading = true;
       const { total, rows } = await getEmployeeList(this.page);
