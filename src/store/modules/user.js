@@ -1,5 +1,6 @@
 import { getToken, setToken, removeToken, setTimeKey } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api/user.js'
+import { resetRouter } from '@/router'
 const state = {
   //放置状态
   //vuex一初始化，就要从缓存cookie中获取token
@@ -49,14 +50,19 @@ const actions = {
     //将接口合并后再存入vuex
     console.log({ ...result, ...baseInfo });
     context.commit('setUserInfo', { ...result, ...baseInfo }) //vuex存储用户信息
-    return result //这里为什么要返回result，暂时不清楚
+    return result //这里为什么要返回result，暂时不清楚,做到权限管理这里发现要用的返回的数据标识，所以要返回
+
   },
   logout(context) {
     //删token
     context.commit('removeToken')
     //删用户资料
     context.commit('removeUserInfo')
-
+    resetRouter() // 重置路由
+    // 要把premission中的state设置为仅有静态路由
+    // permission和user都是vuex的字模块，字模块没命名空间的话可以直接用,因为不加命名空间的话全都是挂在全局的
+    // 加了命名空间的context只能调用全局的，对于模块里面的action没法调用
+    context.commit('permission/setRoutes', [], { root: true })
   }
 }
 export default {

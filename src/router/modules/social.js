@@ -3,7 +3,7 @@ import Layout from '@/layout'
 // 员工模块的路由规则
 export default {
   path: '/social',
-  name: 'social', // 后面权限管理会用到
+  name: "social_securitys", // 后面权限管理会用到
   component: Layout,
   children: [{
     path: '',

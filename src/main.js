@@ -16,7 +16,7 @@ import * as filters from '@/filters'
 import '@/icons' // icon
 import '@/permission' // permission control
 import * as directives from '@/directives'
-
+import CheckPermission from '@/mixin/checkPermission.js'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -42,6 +42,8 @@ console.log(Object.keys(filters));
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
+// 注册混入对象
+Vue.mixin(CheckPermission)
 // 注册自定义组件
 Vue.use(components)
 new Vue({

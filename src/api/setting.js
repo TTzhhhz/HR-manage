@@ -42,3 +42,11 @@ export function addRole(data) {
     data
   })
 }
+// 修改员工权限的api
+export function assignPerm(data) {
+  return request({
+    url: '/sys/role/assignPrem',
+    method: 'put',
+    data
+  })
+}

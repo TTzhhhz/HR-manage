@@ -2,8 +2,8 @@
 import Layout from '@/layout'
 // 员工模块的路由规则
 export default {
-  path: '/setting',
-  name: 'setting', // 后面权限管理会用到
+  path: '/settings',
+  name: 'settings', // 后面权限管理会用到
   component: Layout,
   children: [{
     path: '',
