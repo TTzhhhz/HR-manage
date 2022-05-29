@@ -12,9 +12,10 @@
           :index="resolvePath(onlyOneChild.path)"
           :class="{ 'submenu-title-noDropdown': !isNest }"
         >
+          <!-- 在注册了vue-i18n之后 每个组件都有一个$t方法 -->
           <item
             :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"
-            :title="onlyOneChild.meta.title"
+            :title="$t(`route.${onlyOneChild.name}`)"
           />
         </el-menu-item>
       </app-link>

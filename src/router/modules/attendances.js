@@ -1,17 +1,37 @@
-// 引入layout组件
+
 import Layout from '@/layout'
-// 员工模块的路由规则
-export default {
+
+const attendRouter = {
   path: '/attendances',
-  name: 'attendances', // 后面权限管理会用到
   component: Layout,
-  children: [{
-    path: '',
-    component: () => import('@/views/attendances'),
-    // meta是路由原信息，可以放数据,这里是通过循环路由来渲染左侧导航栏的
-    meta: {
-      title: '考勤',
-      icon: 'skill'
+  name: 'attendances',
+  children: [
+    {
+      path: '',
+      component: () => import('@/views/attendances'),
+      name: 'attendances',
+      meta: {
+        title: '考勤',
+        icon: 'excel' }
+    },
+    {
+      path: 'archiving',
+      component: () => import('@/views/attendances/historical'),
+      name: 'archiving',
+      hidden: true,
+      meta: {
+        title: '归档'
+      }
+    },
+    {
+      path: 'report/:month',
+      component: () => import('@/views/attendances/report'),
+      name: 'reports',
+      hidden: true,
+      meta: {
+        title: '报表'
+      }
     }
-  }]
+  ]
 }
+export default attendRouter

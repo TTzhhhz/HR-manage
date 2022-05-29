@@ -8,6 +8,7 @@ export default {
   children: [{
     path: '',
     component: () => import('@/views/setting'),
+    name: 'settings',
     // meta是路由原信息，可以放数据,这里是通过循环路由来渲染左侧导航栏的
     meta: {
       title: '设置',

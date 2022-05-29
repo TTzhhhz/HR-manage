@@ -7,6 +7,7 @@ export default {
   component: Layout,
   children: [{
     path: '',
+    name: 'permissions', // 后面权限管理会用到
     component: () => import('@/views/permission'),
     // meta是路由原信息，可以放数据,这里是通过循环路由来渲染左侧导航栏的
     meta: {
